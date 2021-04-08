@@ -14,7 +14,7 @@ void shiftUp(Priq *priq, int i){
 }
 
 void shiftDown(Priq *priq, int i){
-	int temp = priq->vertex[i].d;
+	Vertex temp = priq->vertex[i];
 	int p = i;
 	int c = 2*p+1;
 	
@@ -26,15 +26,15 @@ void shiftDown(Priq *priq, int i){
 		c = c+1;
 	}
 	
-	while(c <= priq->size && temp > priq->vertex[c].d){
-		priq->vertex[p].v_id = priq->vertex[c].d;
+	while(c <= priq->size && temp.d > priq->vertex[c].d){
+		priq->vertex[p] = priq->vertex[c];
 		p = c;
 		c = 2*p+1;
 		if(c+1 <= priq->size && priq->vertex[c].d > priq->vertex[c+1].d){
 			c = c+1;
 		}
 	}
-	priq->vertex[p].d = temp;
+	priq->vertex[p] = temp;
 }
 
 void insert(Priq *priq, int v_id, int d, int p){
@@ -96,6 +96,14 @@ void display(Priq *priq){
 		printf("%d ", priq->vertex[i].v_id);
 	}
 	printf("\n");
+	for(int i = 0; i <= priq->size; i++){
+		printf("%d ", priq->vertex[i].d);
+	}
+	printf("\n");
+	for(int i = 0; i <= priq->size; i++){
+		printf("%d ", priq->vertex[i].p);
+	}
+	printf("\n\n");
 }
 
 Graph* createGraph(int vertices) {

@@ -28,7 +28,6 @@ int main(){
 			addEdge(graph, src, dest, weight);
 		}
 	}
-	printGraph(graph);
 	
 	Vertex result[numVertices+1], temp;
 	Priq priq;
@@ -49,6 +48,7 @@ int main(){
 	temp.marked = 0;
 	result[numVertices] = temp;
 	
+	
 	Vertex u_star, u;
 	Node *tempNode;
 	for(int i=0; i < numVertices; i++){
@@ -62,14 +62,32 @@ int main(){
 					if(tempNode->vertex == u_star.v_id){
 						if(u_star.d + tempNode->weight < u.d){
 							update(&priq, u.v_id, u_star.d + tempNode->weight, u_star.v_id);
+							break;
 						}
 					}
+					tempNode = tempNode->next;
 				}
 			}
 		}
+		
 	}
 	
-	display(&priq);	
+	
+	for(int i=1; i < numVertices; i++){
+		int j = i;
+		printf("%d ", i);
+		if(result[j].p == -1){
+			printf("NO PATH\n");
+		}
+		else{
+			printf("%d ", i);
+			while(result[j].p != numVertices){
+				j = result[j].p;
+				printf("%d ", j);
+			}
+			printf("%d %d\n", numVertices, result[i].d);
+		}
+	}
 	
 	fclose(fp);
 	
