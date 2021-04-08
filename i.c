@@ -1,20 +1,20 @@
 #include "h.h"
 
 void shiftUp(Priq *priq, int i){
-	int temp = priq->vertex[i].v_id;
+	Vertex temp = priq->vertex[i];
 	int c = i;
 	int p = (c-1)/2;
 	
-	while(c > 0 && priq->vertex[p].v_id > temp){
-		priq->vertex[c].v_id = priq->vertex[p].v_id;
+	while(c > 0 && priq->vertex[p].d > temp.d){
+		priq->vertex[c] = priq->vertex[p];
 		c = p;
 		p = (c-1)/2;
 	}
-	priq->vertex[c].v_id = temp;
+	priq->vertex[c] = temp;
 }
 
 void shiftDown(Priq *priq, int i){
-	int temp = priq->vertex[i].v_id;
+	int temp = priq->vertex[i].d;
 	int p = i;
 	int c = 2*p+1;
 	
@@ -22,24 +22,27 @@ void shiftDown(Priq *priq, int i){
 		return;
 	}
 	
-	if(c+1 <= priq->size && priq->vertex[c].v_id > priq->vertex[c+1].v_id){
+	if(c+1 <= priq->size && priq->vertex[c].d > priq->vertex[c+1].d){
 		c = c+1;
 	}
 	
-	while(c <= priq->size && temp > priq->vertex[c].v_id){
-		priq->vertex[p].v_id = priq->vertex[c].v_id;
+	while(c <= priq->size && temp > priq->vertex[c].d){
+		priq->vertex[p].v_id = priq->vertex[c].d;
 		p = c;
 		c = 2*p+1;
-		if(c+1 <= priq->size && priq->vertex[c].v_id > priq->vertex[c+1].v_id){
+		if(c+1 <= priq->size && priq->vertex[c].d > priq->vertex[c+1].d){
 			c = c+1;
 		}
 	}
-	priq->vertex[p].v_id = temp;
+	priq->vertex[p].d = temp;
 }
 
-void insert(Priq *priq, int n){
+void insert(Priq *priq, int v_id, int d, int p){
 	priq->size++;
-	priq->vertex[priq->size].v_id = n;
+	priq->vertex[priq->size].v_id = v_id;
+	priq->vertex[priq->size].d = d;
+	priq->vertex[priq->size].p = p;
+	priq->vertex[priq->size].marked = 0;
 	
 	shiftUp(priq, priq->size);
 }
@@ -50,30 +53,41 @@ Vertex delete(Priq *priq){
 		temp.v_id = -1;
 		temp.d = -1;
 		temp.p = -1;
+		temp.marked = -1;
 		return temp;
 	}
 
 	Vertex res;
+	priq->vertex[0].marked = 1;
 	res = priq->vertex[0];
 	
-	priq->vertex[0].v_id = priq->vertex[priq->size].v_id;
+	priq->vertex[0] = priq->vertex[priq->size];
 	priq->size--;
 	
 	shiftDown(priq, 0);
 	return res;
 }
 
-void update(Priq *priq, int i, int n){
-	if(i > priq->size) return;
-	if(n > priq->vertex[i].v_id){
-		priq->vertex[i].v_id = n;
+void update(Priq *priq, int v_id, int d, int p){
+	int pos;
+	
+	for(int i=0; i <= priq->size; i++){
+		if(priq->vertex[i].v_id == v_id){
+			pos = i;
+			break;
+		}
+	}
+	
+	priq->vertex[pos].p = p;
+	if(d > priq->vertex[pos].d){
+		priq->vertex[pos].d = d;
 		
-		shiftDown(priq, i);
+		shiftDown(priq, pos);
 	}
 	else{
-		priq->vertex[i].v_id = n;
+		priq->vertex[pos].d = d;
 		
-		shiftUp(priq, i);
+		shiftUp(priq, pos);
 	}
 }
 
@@ -90,7 +104,7 @@ Graph* createGraph(int vertices) {
 	graph->numVertices = vertices;
 	graph->adjLists = malloc(vertices * sizeof(Node*));
 
-	for (int i = 0; i < vertices; i++) {
+	for (int i = 0; i <= vertices; i++) {
 		graph->adjLists[i] = NULL;
 	}
   return graph;
@@ -108,4 +122,16 @@ void addEdge(Graph* graph, int src, int dest, int weight) {
 	Node* newNode = createNode(dest, weight);
 	newNode->next = graph->adjLists[src];
 	graph->adjLists[src] = newNode;
+}
+
+void printGraph(Graph* graph) {
+	for (int v = 1; v <= graph->numVertices; v++) {
+		Node* temp = graph->adjLists[v];
+		printf("\n Adjacency list of vertex %d\n ", v);
+		while (temp) {
+			printf("%d[%d] -> ", temp->vertex, temp->weight);
+			temp = temp->next;
+		}
+		printf("\n");
+	}
 }
