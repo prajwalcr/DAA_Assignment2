@@ -1,39 +1,33 @@
 #include "h.h"
 
 int main(){
-	Priq dummy;
-	dummy.size = -1;
-	display(&dummy);
-	insert(&dummy, 10);
-	display(&dummy);
-	insert(&dummy, 23);
-	display(&dummy);
-	insert(&dummy, 3);
-	display(&dummy);
-	insert(&dummy, 324);
-	display(&dummy);
-	insert(&dummy, 521);
-	display(&dummy);
-	insert(&dummy, 1);
-	display(&dummy);
-	insert(&dummy, 33);
-	display(&dummy);
-	printf("%d\n", delete(&dummy).v_id);
-	display(&dummy);
-	update(&dummy, 3, 5);
-	display(&dummy);
-	printf("%d\n", delete(&dummy).v_id);
-	display(&dummy);
-	printf("%d\n", delete(&dummy).v_id);
-	display(&dummy);
-	printf("%d\n", delete(&dummy).v_id);
-	display(&dummy);
-	printf("%d\n", delete(&dummy).v_id);
-	display(&dummy);
-	printf("%d\n", delete(&dummy).v_id);
-	display(&dummy);
-	printf("%d\n", delete(&dummy).v_id);
-	display(&dummy);
-	printf("%d\n", delete(&dummy).v_id);
-	display(&dummy);
+	int numVertices;
+	char buf[1024];
+	char *line = buf;
+	FILE *fp = fopen("adjacencylist.txt", "r");
+	if(fp == NULL){
+		printf("Error opening file\n");
+		return 0;
+	}
+	
+	fgets(buf, sizeof(buf), fp);
+	sscanf(line, "%d", &numVertices);
+	printf("%d\n", numVertices);
+
+	while(fgets(buf, sizeof(buf), fp)){
+		int src, n, dest, weight, count=0;
+		//char data[] = "100 185 400 11 1000";
+    		//line = data;
+    		char *line = buf;
+		sscanf(line, "%d%n", &src, &n);
+		line += n;
+		printf("%d ", src);
+
+		while(sscanf(line, "%d%d%n", &dest, &weight, &n) == 2){
+			line += n;
+			printf("%d %d ", dest, weight);
+		}
+		printf("\n");
+	}
+	
 }

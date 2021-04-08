@@ -13,6 +13,19 @@ typedef struct Priq{
 	int size;
 } Priq;
 
+typedef struct Node
+{
+    int vertex;
+    int weight;
+    struct node* next;
+} Node;
+
+typedef struct Graph
+{
+    int numVertices;
+    struct node** adjLists;
+} Graph;
+
 typedef struct Dummy{
 	int H[100];
 	int size;
@@ -25,3 +38,5 @@ void display(Priq *);
 
 void shiftUp(Priq *, int);
 void shiftDown(Priq *, int);
+
+Graph *createGraph(int);

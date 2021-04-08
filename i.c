@@ -83,3 +83,29 @@ void display(Priq *priq){
 	}
 	printf("\n");
 }
+
+Graph* createGraph(int vertices) {
+	Graph* graph = malloc(sizeof(Graph));
+	
+	graph->numVertices = vertices;
+	graph->adjLists = malloc(vertices * sizeof(Node*));
+
+	for (int i = 0; i < vertices; i++) {
+		graph->adjLists[i] = NULL;
+	}
+  return graph;
+}
+
+Node* createNode(int vertex, int weight) {
+	Node* newNode = malloc(sizeof(Node));
+	newNode->vertex = vertex;
+	newNode->weight = weight;
+	newNode->next = NULL;
+	return newNode;
+}
+
+void addEdge(Graph* graph, int src, int dest, int weight) {
+	Node* newNode = createNode(dest, weight);
+	newNode->next = graph->adjLists[src];
+	graph->adjLists[src] = newNode;
+}
