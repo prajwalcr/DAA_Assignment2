@@ -9,7 +9,7 @@ typedef struct Vertex{
 } Vertex;
 
 typedef struct Priq{
-	Vertex *vertex;
+	Vertex vertex[1000];
 	int size;
 } Priq;
 
@@ -18,10 +18,10 @@ typedef struct Dummy{
 	int size;
 }Dummy;
 
-void insert(Dummy *, int);
-void update(Dummy *, int, int);
-int delete(Dummy *);
-void display(Dummy *);
+void insert(Priq *, int);
+void update(Priq *, int, int);
+Vertex delete(Priq *);
+void display(Priq *);
 
-void shiftUp(Dummy *, int);
-void shiftDown(Dummy *, int);
+void shiftUp(Priq *, int);
+void shiftDown(Priq *, int);

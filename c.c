@@ -1,7 +1,7 @@
 #include "h.h"
 
 int main(){
-	Dummy dummy;
+	Priq dummy;
 	dummy.size = -1;
 	display(&dummy);
 	insert(&dummy, 10);
@@ -18,20 +18,22 @@ int main(){
 	display(&dummy);
 	insert(&dummy, 33);
 	display(&dummy);
-	printf("%d\n", delete(&dummy));
+	printf("%d\n", delete(&dummy).v_id);
 	display(&dummy);
-	printf("%d\n", delete(&dummy));
+	update(&dummy, 3, 5);
 	display(&dummy);
-	printf("%d\n", delete(&dummy));
+	printf("%d\n", delete(&dummy).v_id);
 	display(&dummy);
-	printf("%d\n", delete(&dummy));
+	printf("%d\n", delete(&dummy).v_id);
 	display(&dummy);
-	printf("%d\n", delete(&dummy));
+	printf("%d\n", delete(&dummy).v_id);
 	display(&dummy);
-	printf("%d\n", delete(&dummy));
+	printf("%d\n", delete(&dummy).v_id);
 	display(&dummy);
-	printf("%d\n", delete(&dummy));
+	printf("%d\n", delete(&dummy).v_id);
 	display(&dummy);
-	printf("%d\n", delete(&dummy));
+	printf("%d\n", delete(&dummy).v_id);
+	display(&dummy);
+	printf("%d\n", delete(&dummy).v_id);
 	display(&dummy);
 }

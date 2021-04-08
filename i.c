@@ -1,135 +1,85 @@
 #include "h.h"
 
-void shiftUp(Dummy *dummy, int i){
-	int temp = dummy->H[i];
+void shiftUp(Priq *priq, int i){
+	int temp = priq->vertex[i].v_id;
 	int c = i;
 	int p = (c-1)/2;
 	
-	while(c > 0 && dummy->H[p] > temp){
-		dummy->H[c] = dummy->H[p];
+	while(c > 0 && priq->vertex[p].v_id > temp){
+		priq->vertex[c].v_id = priq->vertex[p].v_id;
 		c = p;
 		p = (c-1)/2;
 	}
-	dummy->H[c] = temp;
+	priq->vertex[c].v_id = temp;
 }
 
-void shiftDown(Dummy *dummy, int i){
-	int temp = dummy->H[i];
+void shiftDown(Priq *priq, int i){
+	int temp = priq->vertex[i].v_id;
 	int p = i;
 	int c = 2*p+1;
 	
-	if(c > dummy->size){
+	if(c > priq->size){
 		return;
 	}
 	
-	if(c+1 <= dummy->size && dummy->H[c] > dummy->H[c+1]){
+	if(c+1 <= priq->size && priq->vertex[c].v_id > priq->vertex[c+1].v_id){
 		c = c+1;
 	}
 	
-	while(c <= dummy->size && temp > dummy->H[c]){
-		dummy->H[p] = dummy->H[c];
+	while(c <= priq->size && temp > priq->vertex[c].v_id){
+		priq->vertex[p].v_id = priq->vertex[c].v_id;
 		p = c;
 		c = 2*p+1;
-		if(c+1 <= dummy->size && dummy->H[c] > dummy->H[c+1]){
+		if(c+1 <= priq->size && priq->vertex[c].v_id > priq->vertex[c+1].v_id){
 			c = c+1;
 		}
 	}
-	dummy->H[p] = temp;
+	priq->vertex[p].v_id = temp;
 }
 
-void insert(Dummy *dummy, int n){
-	dummy->size++;
-	dummy->H[dummy->size] = n;
+void insert(Priq *priq, int n){
+	priq->size++;
+	priq->vertex[priq->size].v_id = n;
 	
-	int c = dummy->size;
-	int p = (c-1)/2;
-	
-	while(c > 0 && dummy->H[p] > n){
-		dummy->H[c] = dummy->H[p];
-		c = p;
-		p = (c-1)/2;
-	}
-	dummy->H[c] = n;
+	shiftUp(priq, priq->size);
 }
 
-int delete(Dummy *dummy){
-	if(dummy->size < 0) return -1;
+Vertex delete(Priq *priq){
+	if(priq->size < 0){
+		Vertex temp;
+		temp.v_id = -1;
+		temp.d = -1;
+		temp.p = -1;
+		return temp;
+	}
 
-	int result;
-	result = dummy->H[0];
+	Vertex res;
+	res = priq->vertex[0];
 	
-	dummy->H[0] = dummy->H[dummy->size];
-	dummy->size--;
+	priq->vertex[0].v_id = priq->vertex[priq->size].v_id;
+	priq->size--;
 	
-	int temp = dummy->H[0];
-	int p = 0;
-	int c = 2*p+1;
-	
-	if(c > dummy->size){
-		return result;
-	}
-	
-	if(c+1 <= dummy->size && dummy->H[c] > dummy->H[c+1]){
-		c = c+1;
-	}
-	
-	while(c <= dummy->size && temp > dummy->H[c]){
-		dummy->H[p] = dummy->H[c];
-		p = c;
-		c = 2*p+1;
-		if(c+1 <= dummy->size && dummy->H[c] > dummy->H[c+1]){
-			c = c+1;
-		}
-	}
-	dummy->H[p] = temp;
-	return result;
+	shiftDown(priq, 0);
+	return res;
 }
 
-void update(Dummy *dummy, int i, int n){
-	if(i > dummy->size) return;
-	if(n > dummy->H[i]){
-		dummy->H[i] = n;
+void update(Priq *priq, int i, int n){
+	if(i > priq->size) return;
+	if(n > priq->vertex[i].v_id){
+		priq->vertex[i].v_id = n;
 		
-		int temp = dummy->H[i];
-		int p = i;
-		int c = 2*p+1;
-		
-		if(c > dummy->size){
-			return;
-		}
-		
-		if(c+1 <= dummy->size && dummy->H[c] > dummy->H[c+1]){
-			c = c+1;
-		}
-		
-		while(c <= dummy->size && temp > dummy->H[c]){
-			dummy->H[p] = dummy->H[c];
-			p = c;
-			c = 2*p+1;
-			if(c+1 <= dummy->size && dummy->H[c] > dummy->H[c+1]){
-				c = c+1;
-			}
-		}
-		dummy->H[p] = temp;
+		shiftDown(priq, i);
 	}
 	else{
-		dummy->H[i] = n;
+		priq->vertex[i].v_id = n;
 		
-		int c = i;
-		int p = (c-1)/2;
-		
-		while(c > 0 && dummy->H[p] > n){
-			dummy->H[c] = dummy->H[p];
-			c = p;
-			p = (c-1)/2;
-		}
-		dummy->H[c] = n;
+		shiftUp(priq, i);
 	}
 }
 
-void display(Dummy *dummy){
-	for(int i = 0; i<=dummy->size; i++){
-		printf("%d ", dummy->H[i]);
+void display(Priq *priq){
+	for(int i = 0; i <= priq->size; i++){
+		printf("%d ", priq->vertex[i].v_id);
 	}
 	printf("\n");
 }
