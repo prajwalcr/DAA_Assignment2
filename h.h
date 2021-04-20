@@ -34,7 +34,7 @@ typedef struct Dummy{
 }Dummy;
 
 void insert(Priq *, int, int, int);
-void update(Priq *, int, int, int);
+Vertex update(Priq *, int, int, int);
 Vertex delete(Priq *);
 void display(Priq *);
 
