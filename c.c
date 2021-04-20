@@ -1,4 +1,4 @@
-#include "h.h"
+#include "PES1UG19CS336_H.h"
 
 int main(){
 	int numVertices;
@@ -16,6 +16,8 @@ int main(){
 	
 	graph = createGraph(numVertices);
 
+	/******<INPUT>******/	
+	
 	while(fgets(buf, sizeof(buf), fp)){
 		int src, n, dest, weight, count=0;
     		char *line = buf;
@@ -28,6 +30,12 @@ int main(){
 			addEdge(graph, src, dest, weight);
 		}
 	}
+	
+	/******</INPUT>******/
+	
+	
+	
+	/******<DIJKSTRA ALGORITHM>******/
 	
 	Vertex result[numVertices+1], temp;
 	Priq priq;
@@ -47,8 +55,7 @@ int main(){
 	temp.p = -1;
 	temp.marked = 0;
 	result[numVertices] = temp;
-	
-	
+		
 	Vertex u_star, u;
 	Node *tempNode;
 	for(int i=0; i < numVertices; i++){
@@ -61,7 +68,7 @@ int main(){
 				while(tempNode){
 					if(tempNode->vertex == u_star.v_id){
 						if(u_star.d + tempNode->weight < u.d){
-							update(&priq, u.v_id, u_star.d + tempNode->weight, u_star.v_id);
+							result[u.v_id] = update(&priq, u.v_id, u_star.d + tempNode->weight, u_star.v_id);
 							break;
 						}
 					}
@@ -72,6 +79,11 @@ int main(){
 		
 	}
 	
+	/******</DIJKSTRA ALGORITHM>******/
+	
+	
+	
+	/******<OUTPUT>******/
 	
 	for(int i=1; i < numVertices; i++){
 		int j = i;
@@ -90,5 +102,7 @@ int main(){
 	}
 	
 	fclose(fp);
+	
+	/******</OUTPUT>******/
 	
 }
