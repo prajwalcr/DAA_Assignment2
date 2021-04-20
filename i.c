@@ -1,4 +1,4 @@
-#include "h.h"
+#include "PES1UG19CS336_H.h"
 
 void shiftUp(Priq *priq, int i){
 	Vertex temp = priq->vertex[i];
@@ -68,8 +68,9 @@ Vertex delete(Priq *priq){
 	return res;
 }
 
-void update(Priq *priq, int v_id, int d, int p){
+Vertex update(Priq *priq, int v_id, int d, int p){
 	int pos;
+	Vertex temp;
 	
 	for(int i=0; i <= priq->size; i++){
 		if(priq->vertex[i].v_id == v_id){
@@ -81,14 +82,15 @@ void update(Priq *priq, int v_id, int d, int p){
 	priq->vertex[pos].p = p;
 	if(d > priq->vertex[pos].d){
 		priq->vertex[pos].d = d;
-		
+		temp = priq->vertex[pos];
 		shiftDown(priq, pos);
 	}
 	else{
 		priq->vertex[pos].d = d;
-		
+		temp = priq->vertex[pos];
 		shiftUp(priq, pos);
 	}
+	return temp;
 }
 
 void display(Priq *priq){
